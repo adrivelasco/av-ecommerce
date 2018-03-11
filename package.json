@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "Universal React App",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:watch": "npm run clean && webpack --config tools/webpack/webpack.config.js -w",
+    "start:watch": "NODE_ENV=development nodemon -e js,json,css server/index.js",
+    "lint": "eslint --fix ."
   },
   "repository": {
     "type": "git",
