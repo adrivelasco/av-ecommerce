@@ -1,7 +1,3 @@
-/**
- * Create the store with dynamic reducers
- */
-
 import { routerMiddleware } from 'react-router-redux';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
