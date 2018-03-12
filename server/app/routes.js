@@ -3,6 +3,7 @@
 const path = require('path');
 const express = require('express');
 const api = require('../api');
+const serverSideRender = require('../core/serverSideRender');
 
 const router = express.Router();
 
@@ -13,6 +14,6 @@ router.use('/static', express.static(path.resolve(__dirname, '../../build/static
 router.get('/api', api);
 
 // SSR Middleware
-router.get('*', () => { });
+router.get('*', serverSideRender);
 
 module.exports = router;
