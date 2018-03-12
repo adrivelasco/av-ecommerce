@@ -1,13 +1,14 @@
 'use strict';
 
-const { Logger, transports } = require('winston');
+const winston = require('winston');
 
-const logger = new (Logger)({
+const logger = winston.createLogger({
   transports: [
-    new transports.Console({
-      colorize: true
-    })
-  ],
+    new winston.transports.Console({ colorize: true })
+  ]
+});
+
+winston.addColors({
   levels: {
     error: 0,
     debug: 1,
