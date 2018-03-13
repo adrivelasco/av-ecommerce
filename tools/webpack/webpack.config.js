@@ -6,7 +6,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const AssetsPlugin = require('assets-webpack-plugin');
-const pkg = require('../package.json');
+const pkg = require('../../package.json');
 
 const isDebug = !process.argv.includes('--env.production');
 const isVerbose = process.argv.includes('--verbose');
@@ -18,26 +18,49 @@ const reFont = /\.(eot|otf|ttf|woff|woff2)$/;
 const staticAssetName = '[name].[ext]';
 
 const config = {
+
+  mode: isDebug ? 'development' : 'production',
+
   context: path.resolve(__dirname, '../..'),
+
   name: 'client',
+
   target: 'web',
+
   entry: {
-    vendor: ['./client/vendor/css/vendor.css'],
     client: ['babel-polyfill', './client/app.js']
   },
+
   resolve: {
     modules: ['node_modules', 'client']
   },
+
   output: {
-    path: path.resolve(__dirname, '../build/static'),
+    path: path.resolve(__dirname, '../../build/static'),
     publicPath: '/static/',
     filename: 'js/[name].[hash:8].js',
-    chunkFilename: 'js/[name].[hash:8].chunk.js'
+    chunkFilename: 'js/[name].[hash:8].js'
   },
+
+  optimization: {
+    // Move modules that occur in multiple entry chunks to a new entry chunk (the commons chunk).
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /node_modules/,
+          name: 'vendor',
+          chunks: 'all',
+          enforce: true
+        }
+      }
+    }
+  },
+
   plugins: [
     // Extract all CSS files and compile it on a single file
     new ExtractTextPlugin({
-      filename: 'css/[name].[contenthash:base64:8].css',
+      filename: '[name].[contenthash:base64:8].css',
+      publicPath: '/static/css',
       allChunks: true
     }),
 
@@ -54,38 +77,14 @@ const config = {
       prettyPrint: true
     }),
 
-    // Move modules that occur in multiple entry chunks to a new entry chunk (the commons chunk).
-    new webpack.optimize.CommonsChunkPlugin({
-      name: 'vendor',
-      minChunks: module => /node_modules/.test(module.resource)
-    }),
-
     ...(isDebug
       ? [
-        new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.NamedModulesPlugin()
       ]
       : [
         // Decrease script evaluation time
-        new webpack.optimize.ModuleConcatenationPlugin(),
-        // Minimize all JavaScript output of chunks
-        new webpack.optimize.UglifyJsPlugin({
-          sourceMap: true,
-          compress: {
-            screw_ie8: true,
-            warnings: isVerbose,
-            unused: true,
-            dead_code: true
-          },
-          mangle: {
-            screw_ie8: true
-          },
-          output: {
-            comments: false,
-            screw_ie8: true
-          }
-        })
+        new webpack.optimize.ModuleConcatenationPlugin()
       ])
   ],
   module: {
@@ -131,27 +130,8 @@ const config = {
       {
         test: /\.css/,
         rules: [
-          // Process external/third-party styles
-          {
-            include: path.resolve(__dirname, '../../client/vendor'),
-            use: ExtractTextPlugin.extract({
-              fallback: 'style-loader',
-              use: [
-                {
-                  loader: 'css-loader',
-                  options: {
-                    sourceMap: isDebug,
-                    minimize: isDebug
-                      ? false
-                      : { discardComments: { removeAll: true } }
-                  }
-                }
-              ]
-            })
-          },
           // Process internal/project styles (from client folder)
           {
-            exclude: path.resolve(__dirname, '../../client/vendor'),
             include: [path.resolve(__dirname, '../../client')],
             use: ExtractTextPlugin.extract({
               fallback: 'isomorphic-style-loader', // Convert CSS into JS module
