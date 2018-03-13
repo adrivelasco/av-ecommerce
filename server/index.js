@@ -3,11 +3,8 @@
 // Loading enviroment variables
 require('dotenv').config();
 
-const app = require('./app');
-const config = require('./config');
+// Babel register for read ES6
 const fs = require('fs');
-
-// Babel register
 const babelrc = fs.readFileSync('./.babelrc');
 let babelConfig;
 
@@ -21,6 +18,10 @@ try {
 require('babel-polyfill');
 require('babel-register')(babelConfig);
 require('babel-core').transform('code', babelConfig);
+
+// Node.js listening middleware
+const app = require('./app');
+const config = require('./config');
 
 app.listen(config.port, () =>
   console.log(`Nodejs server is running on PORT ${config.port} (${config.env})`)
