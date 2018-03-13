@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Header } from 'semantic-ui-react';
 
-import s from './Head.css';
+import s from './AppBar.css';
 
-const Head = ({ children }) => {
+const AppBar = ({ children }) => {
   return (
     <div className={s.root}>
       <Header as="h1">
@@ -14,8 +14,8 @@ const Head = ({ children }) => {
   );
 };
 
-Head.propTypes = {
+AppBar.propTypes = {
   children: PropTypes.node
 };
 
-export default Head;
+export default AppBar;
