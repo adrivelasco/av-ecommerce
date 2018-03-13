@@ -1,4 +1,5 @@
 import Homepage from './homepage';
+import Product from './product';
 
 const views = [
   {
@@ -6,6 +7,12 @@ const views = [
     exact: true,
     title: Homepage.title,
     component: Homepage.component
+  },
+  {
+    path: '/product',
+    exact: true,
+    title: Product.title,
+    component: Product.component
   }
 ];
 
