@@ -18,4 +18,35 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 40px;
+}
+
+.item {
+  position: relative;
+  padding-bottom: 30px;
+}
+
+.item-image {
+  position: relative;
+  img {
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
+  }
+}
+
+.item-content {
+  padding: 15px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-price {
+  margin-bottom: 5px;
+  display: block;
 }

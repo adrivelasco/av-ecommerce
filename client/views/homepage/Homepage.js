@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Loader, Icon, Button, Image as ImageComponent, Item, Pagination } from 'semantic-ui-react';
+import { Loader, Icon, Button, Image as ImageComponent, Item, Pagination, Grid } from 'semantic-ui-react';
 
 import { getMarketProducts } from '../../actions/marketplace';
 import s from './Homepage.css';
@@ -50,7 +50,7 @@ class Homepage extends React.Component {
     }
 
     if (marketplace.products.success) {
-      const groupedArr = this.createGroupedArray(marketplace.products.results, 6);
+      const groupedArr = this.createGroupedArray(marketplace.products.results, 8);
       return (
         <div className={s.root}>
           <div className={s.pagination}>
@@ -66,31 +66,40 @@ class Homepage extends React.Component {
               size="tiny"
             />
           </div>
-          <Item.Group divided>
-            {groupedArr[this.state.page - 1].map((product, i) => {
-              return (
-                <Item key={product._id}>
-                  <Item.Image src={product.picture} />
-                  <Item.Content>
-                    <Item.Header as='a'>{product.name}</Item.Header>
-                    <Item.Meta>
-                      <span>{product.company}</span>
-                    </Item.Meta>
-                    <Item.Description>{product.description}</Item.Description>
-                    <Item.Extra>
-                      <Button
-                        primary
-                        floated='right'
-                        onClick={(e) => history.push(`/${product._id}-${product.name}`)}
-                      >
-                        Add to cart
-                      </Button>
-                    </Item.Extra>
-                  </Item.Content>
-                </Item>
-              );
-            })}
-          </Item.Group>
+          <Grid columns="equal">
+            <Grid.Row columns={4}>
+              {groupedArr[this.state.page - 1].map((product, i) => {
+                return (
+                  <Grid.Column key={product._id}>
+                    <Item key={product._id} className={s.item}>
+                      <Item.Image className={s.itemImage} src={product.picture} />
+                      <Item.Content className={s.itemContent}>
+                        <div className={s.itemInfo}>
+                          <Item.Meta>
+                            <span className={s.itemPrice}>
+                              <strong>{product.price}</strong>
+                            </span>
+                          </Item.Meta>
+                          <Item.Header as='a'>{product.name}</Item.Header>
+                          <Item.Meta>
+                            <span>{product.company}</span>
+                          </Item.Meta>
+                        </div>
+                        <Item.Extra>
+                          <Button
+                            primary
+                            onClick={(e) => history.push(`/${product._id}-${product.name}`)}
+                          >
+                            Add to cart
+                          </Button>
+                        </Item.Extra>
+                      </Item.Content>
+                    </Item>
+                  </Grid.Column>
+                );
+              })}
+            </Grid.Row>
+          </Grid>
         </div>
       );
     }
