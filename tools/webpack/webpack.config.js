@@ -18,9 +18,6 @@ const reFont = /\.(eot|otf|ttf|woff|woff2)$/;
 const staticAssetName = '[name].[ext]';
 
 const config = {
-
-  mode: isDebug ? 'development' : 'production',
-
   context: path.resolve(__dirname, '../..'),
 
   name: 'client',
@@ -42,20 +39,6 @@ const config = {
     chunkFilename: 'js/[name].[hash:8].js'
   },
 
-  optimization: {
-    // Move modules that occur in multiple entry chunks to a new entry chunk (the commons chunk).
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          test: /node_modules/,
-          name: 'vendor',
-          chunks: 'all',
-          enforce: true
-        }
-      }
-    }
-  },
-
   plugins: [
     // Extract all CSS files and compile it on a single file
     new ExtractTextPlugin({
@@ -75,6 +58,12 @@ const config = {
       path: path.resolve(__dirname, '../../build'),
       filename: 'assets.json',
       prettyPrint: true
+    }),
+
+    // Move modules that occur in multiple entry chunks to a new entry chunk (the commons chunk).
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
+      minChunks: module => /node_modules/.test(module.resource)
     }),
 
     ...(isDebug
