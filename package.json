@@ -4,6 +4,8 @@
   "description": "Universal React App",
   "scripts": {
     "clean": "shjs ./tools/scripts/clean.js",
+    "build": "cross-env NODE_ENV=production npm run clean && webpack --config tools/webpack/webpack.config.js -w",
+    "start": "cross-env NODE_ENV=production node -e js,json,css server/index.js",
     "build:watch": "cross-env NODE_ENV=development npm run clean && webpack --config tools/webpack/webpack.config.js -w",
     "start:watch": "cross-env NODE_ENV=development nodemon -e js,json,css server/index.js",
     "lint": "eslint --fix ."
