@@ -9,6 +9,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const routes = require('./routes');
 const config = require('../config');
+const api = require('../api');
 
 // Initializing Express App
 const app = express();
@@ -25,12 +26,15 @@ if (config.env === 'development') {
 
 // Register Node.js middleware
 app.disable('x-powered-by');
-app.use(history());
+// app.use(history());
 app.use(cookieParser());
 app.use(sanitized());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compression());
+
+// API MarketPlace
+app.use('/api', api);
 
 // Routing
 app.use(routes);
