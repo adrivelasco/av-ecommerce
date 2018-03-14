@@ -38,10 +38,6 @@ export function checkStatus(response) {
  * @return {object}           The response data
  */
 export default function request(url, options = {}) {
-  options.credentials = 'same-origin';
-  options.mode = 'cors';
-  options.cache = 'default';
-  options.body = JSON.stringify(options.body);
   let headers = new Headers();
   headers.append('Content-Type', 'application/json');
   options.headers = headers;
