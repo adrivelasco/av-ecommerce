@@ -36,7 +36,7 @@ const serverSideRender = (req, res, next) => {
       description: config.app.description,
       favicon: '',
       styles: [assets.client.css],
-      scripts: [assets.client.js],
+      scripts: [assets.vendor.js, assets.client.js],
       state: store.getState(),
       children: renderToString(
         createElement(
