@@ -1,4 +1,4 @@
-import { PRODUCT_LIST } from '../constants';
+import { PRODUCT_LIST, PRODUCT } from '../constants';
 import Marketplace from '../services/marketplace';
 
 export const getMarketProducts = {
@@ -10,8 +10,8 @@ export const getMarketProducts = {
       return Marketplace.getProducts()
         .then(res => {
           dispatch({
-            type: `${PRODUCT_LIST}_REJECTED`,
-            results: res.data
+            type: `${PRODUCT_LIST}_SUCCESS`,
+            results: res.body
           });
           return res;
         })
@@ -26,7 +26,41 @@ export const getMarketProducts = {
   },
   reset: () => dispatch => {
     dispatch({
-      type: `${PRODUCT_LIST}`
+      type: `${PRODUCT_LIST}_RESET`
+    });
+  }
+};
+
+export const getProductById = {
+  fetch: ({ productId, productList }) => dispatch => {
+    dispatch({
+      type: `${PRODUCT}_REQUEST`
+    });
+    if (productList.length > 0) {
+      return dispatch({
+        type: `${PRODUCT}_SUCCESS`,
+        results: productList.filter(({ _id }) => _id === productId)[0]
+      });
+    }
+    return dispatch(getMarketProducts.fetch())
+      .then(res => {
+        dispatch({
+          type: `${PRODUCT}_SUCCESS`,
+          results: res.body.filter(({ _id }) => _id === productId)[0]
+        });
+        return res;
+      })
+      .catch(err => {
+        dispatch({
+          type: `${PRODUCT}_REJECTED`,
+          error: err
+        });
+        return err;
+      });
+  },
+  reset: () => dispatch => {
+    dispatch({
+      type: `${PRODUCT}_RESET`
     });
   }
 };

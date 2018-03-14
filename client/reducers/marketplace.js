@@ -1,4 +1,4 @@
-import { PRODUCT_LIST } from '../constants';
+import { PRODUCT_LIST, PRODUCT } from '../constants';
 
 const initialState = {
   isFetching: false,
@@ -31,9 +31,34 @@ function getProducts(state = initialState, action) {
   }
 }
 
+function getProductById(state = initialState, action) {
+  switch (action.type) {
+    case `${PRODUCT}_REQUEST`:
+      return Object.assign({}, state, {
+        isFetching: true
+      });
+    case `${PRODUCT}_SUCCESS`:
+      return Object.assign({}, state, {
+        isFetching: false,
+        results: action.results,
+        success: true
+      });
+    case `${PRODUCT}_REJECTED`:
+      return Object.assign({}, state, {
+        isFetching: false,
+        rejected: true
+      });
+    case `${PRODUCT}_RESET`:
+      return initialState;
+    default:
+      return state;
+  }
+}
+
 export default function marketplaceReducer(state = {}, action) {
   return {
     products: getProducts(state.products, action),
+    product: getProductById(state.product, action),
     cart: null
   };
 };
