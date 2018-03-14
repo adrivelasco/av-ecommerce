@@ -9,7 +9,7 @@ const views = [
     component: Homepage.component
   },
   {
-    path: '/product',
+    path: '/:productId-:productName',
     exact: true,
     title: Product.title,
     component: Product.component
