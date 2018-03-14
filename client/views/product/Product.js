@@ -59,7 +59,7 @@ class Product extends React.Component {
                         <Button icon='plus' onClick={this.handleAdd} />
                       </Button.Group>
                     </div>
-                    <Button primary>Agregar al carrito</Button>
+                    <Button primary>Add to cart</Button>
                   </div>
                 </Grid.Column>
               </Grid.Row>

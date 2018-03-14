@@ -1,6 +1,6 @@
 import Homepage from './Homepage';
 
 export default {
-  title: 'Inicio',
+  title: 'Home',
   component: Homepage
 };

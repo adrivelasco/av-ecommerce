@@ -1,6 +1,6 @@
 import Product from './Product';
 
 export default {
-  title: 'Producto',
+  title: 'Product',
   component: Product
 };

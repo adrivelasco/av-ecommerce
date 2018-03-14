@@ -80,7 +80,7 @@ class Homepage extends React.Component {
                         floated='right'
                         onClick={(e) => history.push(`/${product._id}-${product.name}`)}
                       >
-                        Comprar
+                        Add to cart
                       </Button>
                     </Item.Extra>
                   </Item.Content>
