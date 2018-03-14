@@ -12,7 +12,12 @@ class Product extends React.Component {
     this.state = {
       quantity: 1
     };
+
+    this.addToCart = this.addToCart.bind(this);
+    this.increaseQuantity = this.increaseQuantity.bind(this);
+    this.decreaseQuantity = this.decreaseQuantity.bind(this);
   }
+
   componentWillMount() {
     const { dispatch, marketplace, match } = this.props;
     if (!marketplace.product.success || marketplace.product._id != match.params.id) {
@@ -24,6 +29,27 @@ class Product extends React.Component {
       }));
     }
   }
+  
+  addToCart(e) {
+    
+  }
+
+  increaseQuantity(e) {
+    if (this.props.marketplace.product.results.stock > this.state.quantity) {
+      this.setState({
+        quantity: this.state.quantity + 1
+      });
+    }
+  }
+
+  decreaseQuantity(e) {
+    if (this.state.quantity > 1) {
+      this.setState({
+        quantity: this.state.quantity - 1
+      });
+    }
+  }
+
   render() {
     const { marketplace } = this.props;
     if (marketplace.product.success) {
@@ -49,17 +75,23 @@ class Product extends React.Component {
                   <p>
                     {prod.description}
                   </p>
-                  <div>
-                    <div>
-                      <Input size="large">
+                  <div className={s.controls}>
+                    <div className={s.controlsQuantity}>
+                      <Button.Group>
+                        <Button
+                          icon="minus"
+                          onClick={this.decreaseQuantity}
+                        />
+                        <Button
+                          icon="plus"
+                          onClick={this.increaseQuantity}
+                        />
+                      </Button.Group>
+                      <Input size="large" className={s.inputQuantity}>
                         {this.state.quantity}
                       </Input>
-                      <Button.Group>
-                        <Button icon='minus' onClick={this.handleRemove} />
-                        <Button icon='plus' onClick={this.handleAdd} />
-                      </Button.Group>
                     </div>
-                    <Button primary>Add to cart</Button>
+                    <Button primary onClick={this.addToCart}>Add to cart</Button>
                   </div>
                 </Grid.Column>
               </Grid.Row>

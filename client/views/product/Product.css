@@ -1,0 +1,20 @@
+.controls {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 35px;
+}
+
+.controls-quantity {
+  position: relative;
+  display: flex;
+}
+
+.input-quantity {
+  padding: 0 15px;
+  height: 100%;
+  border: 1px solid #eee;
+  margin-left: 5px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+}
