@@ -10,10 +10,7 @@ const App = () => {
     <ScrollToTop>
       <Route render={({ location, history }) => {
         return (
-          <Layout
-            location={location}
-            history={history}
-          >
+          <Layout location={location} history={history}>
             <Switch>
               {views.map((view, i) => {
                 return (
@@ -22,9 +19,7 @@ const App = () => {
                     path={view.path}
                     exact={view.exact}
                     pageName={view.title}
-                    render={props =>
-                      <view.component {...props} />
-                    }
+                    render={props => <view.component key={i} {...props} /> }
                   />
                 );
               })}

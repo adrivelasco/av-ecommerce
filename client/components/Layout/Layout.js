@@ -1,13 +1,19 @@
 import React from 'react';
-import { Container } from 'semantic-ui-react';
+import { Container, Dropdown, Image, Menu } from 'semantic-ui-react';
 
-import AppBar from '../AppBar/AppBar';
+import s from './Layout.css';
 
 const Layout = ({ children }) => {
   return (
-    <div>
+    <div className={s.root}>
+      <Menu fixed='top' inverted>
+        <Container>
+          <Menu.Item as='a' header>
+            AV-ECOMMERCE
+          </Menu.Item>
+        </Container>
+      </Menu>
       <Container>
-        <AppBar>AV eCommerce</AppBar>
         {children}
       </Container>
     </div>
