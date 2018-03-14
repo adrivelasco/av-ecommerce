@@ -52,8 +52,11 @@ class Homepage extends React.Component {
     if (marketplace.products.success) {
       const groupedArr = this.createGroupedArray(marketplace.products.results, 6);
       return (
-        <div>
+        <div className={s.root}>
           <div className={s.pagination}>
+            <div>
+              <p>Búsqueda: <strong>{marketplace.products.results.length}</strong> resultados encontrados</p>
+            </div>
             <Pagination
               lastItem={null}
               firstItem={null}

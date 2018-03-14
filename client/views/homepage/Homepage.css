@@ -9,8 +9,13 @@
   bottom: 0;
 }
 
+.root {
+  position: relative;
+  padding: 20px 0;
+}
+
 .pagination {
   display: flex;
-  justify-content: flex-end;
-  padding-top: 20px;
+  justify-content: space-between;
+  align-items: center;
 }
