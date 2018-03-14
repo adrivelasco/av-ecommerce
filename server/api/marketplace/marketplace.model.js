@@ -13,7 +13,7 @@ const MarketPlaceModel = {
       const productList = await MarketPlaceService.getProducts();
       return {
         statusCode: productList.statusCode,
-        products: productList.body
+        body: productList.body
       };
     } catch (error) {
       error.statusCode = error.statusCode || 500;
