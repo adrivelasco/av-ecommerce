@@ -1,6 +1,7 @@
 import Homepage from './homepage';
 import Product from './product';
 import NotFound from './not-found';
+import Cart from './cart';
 
 const views = [
   {
@@ -14,6 +15,12 @@ const views = [
     exact: true,
     title: Product.title,
     component: Product.component
+  },
+  {
+    path: '/cart',
+    exact: true,
+    title: Cart.title,
+    component: Cart.component
   },
   {
     path: '*',
