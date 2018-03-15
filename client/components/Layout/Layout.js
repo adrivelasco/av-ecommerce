@@ -20,8 +20,8 @@ const Layout = ({ children, history, location }) => {
             <Menu.Item>
               <Button
                 primary
-                onClick={() => history.push('/mycart')}
-                active={location.pathname === '/mycart'}
+                onClick={() => history.push('/cart')}
+                active={location.pathname === '/cart'}
               >
                 <Icon name="shop" />
                 My cart
