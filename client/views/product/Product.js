@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Segment, Grid, Header, Image, Input } from 'semantic-ui-react';
+import { Button, Segment, Grid, Header, Image, Input, Breadcrumb, Modal, Icon } from 'semantic-ui-react';
 
-import { getProductById } from '../../actions/marketplace';
+import { getProductById, addProductToCart } from '../../actions/marketplace';
 import s from './Product.css';
 
 class Product extends React.Component {
@@ -10,10 +10,12 @@ class Product extends React.Component {
     super(props);
 
     this.state = {
-      quantity: 1
+      quantity: 1,
+      requested: false
     };
 
     this.addToCart = this.addToCart.bind(this);
+    this.closeModal = this.closeModal.bind(this);
     this.increaseQuantity = this.increaseQuantity.bind(this);
     this.decreaseQuantity = this.decreaseQuantity.bind(this);
   }
@@ -29,9 +31,19 @@ class Product extends React.Component {
       }));
     }
   }
-  
+
   addToCart(e) {
-    
+    this.props.dispatch(
+      addProductToCart(this.props.marketplace.product.results, this.state.quantity));
+    this.setState({
+      requested: true
+    });
+  }
+
+  closeModal(e) {
+    this.setState({
+      requested: false
+    });
   }
 
   increaseQuantity(e) {
@@ -51,15 +63,53 @@ class Product extends React.Component {
   }
 
   render() {
-    const { marketplace } = this.props;
+    const { marketplace, history } = this.props;
     if (marketplace.product.success) {
       const prod = marketplace.product.results;
       return (
         <div className={s.root}>
-          <Segment style={{ padding: '8em 0em' }} vertical>
+          <Modal open={this.state.requested} size="mini">
+            <Header as="h2">
+              <Icon color="green" name="check" />
+              <Header.Content>
+                Added to Cart
+                <Header.Subheader>
+                  Subtotal ({this.state.quantity} item{this.state.quantity > 1 && 's'}):
+                  <strong> ${this.state.quantity * Number(prod.price.replace(/[^0-9\.-]+/g, ''))}</strong>
+                </Header.Subheader>
+              </Header.Content>
+            </Header>
+            <div className={s.modalActions}>
+              <Button
+                fluid
+                primary
+                onClick={() => history.push('/cart')}
+              >
+                Proceed to checkout ({this.state.quantity} item{this.state.quantity > 1 && 's'})
+              </Button>
+              <br />
+              <Button
+                fluid
+                secondary
+                onClick={this.closeModal}
+              >
+                Keep shopping
+              </Button>
+            </div>
+          </Modal>
+          <Segment style={{ padding: '4em 0em' }} vertical>
             <Grid container stackable verticalAlign='middle'>
               <Grid.Row>
-                <Grid.Column floated='left' width={6}>
+                <Grid.Column width={12}>
+                  <Breadcrumb>
+                    <Breadcrumb.Section link onClick={() => history.push('/')}>Home</Breadcrumb.Section>
+                    <Breadcrumb.Divider />
+                    <Breadcrumb.Section active>{prod.name}</Breadcrumb.Section>
+                  </Breadcrumb>
+                </Grid.Column>
+              </Grid.Row>
+              <Grid.Row>
+                <Grid.Column floated="left" width={6}>
                   <Image size='large' src={prod.picture} />
                 </Grid.Column>
                 <Grid.Column width={8}>

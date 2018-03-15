@@ -18,3 +18,7 @@
   display: flex;
   align-items: center;
 }
+
+.modal-actions {
+  padding: 20px;
+}
