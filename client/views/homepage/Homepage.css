@@ -11,7 +11,7 @@
 
 .root {
   position: relative;
-  padding: 20px 0;
+  padding: 40px 0;
 }
 
 .pagination {
@@ -27,6 +27,7 @@
 }
 
 .item-image {
+  cursor: pointer;
   position: relative;
   img {
     max-width: 100%;

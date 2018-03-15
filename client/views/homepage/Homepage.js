@@ -15,6 +15,7 @@ class Homepage extends React.Component {
 
     this.createGroupedArray = this.createGroupedArray.bind(this);
     this.onPageChange = this.onPageChange.bind(this);
+    this.onProductClick = this.onProductClick.bind(this);
   }
 
   createGroupedArray(arr, chunkSize) {
@@ -27,13 +28,22 @@ class Homepage extends React.Component {
   }
 
   componentWillMount() {
-    this.props.dispatch(getMarketProducts.fetch());
+    if (!this.props.marketplace.products.success &&
+      !this.props.marketplace.products.isFetching) {
+      this.props.dispatch(getMarketProducts.fetch());
+    }
   }
+
   onPageChange(e, data) {
     this.setState({
       page: data.activePage
     });
   }
+
+  onProductClick(e, product) {
+    return this.props.history.push(`/${product._id}-${product.name}`);
+  }
+
   render() {
     const { marketplace, history } = this.props;
 
@@ -66,13 +76,18 @@ class Homepage extends React.Component {
               size="tiny"
             />
           </div>
-          <Grid columns="equal">
+          <Grid>
             <Grid.Row columns={4}>
               {groupedArr[this.state.page - 1].map((product, i) => {
                 return (
                   <Grid.Column key={product._id}>
                     <Item key={product._id} className={s.item}>
-                      <Item.Image className={s.itemImage} src={product.picture} />
+                      <Item.Image
+                        as="a"
+                        className={s.itemImage}
+                        src={product.picture}
+                        onClick={(e) => this.onProductClick(e, product)}
+                      />
                       <Item.Content className={s.itemContent}>
                         <div className={s.itemInfo}>
                           <Item.Meta>
@@ -88,7 +103,7 @@ class Homepage extends React.Component {
                         <Item.Extra>
                           <Button
                             primary
-                            onClick={(e) => history.push(`/${product._id}-${product.name}`)}
+                            onClick={(e) => this.onProductClick(e, product)}
                           >
                             Add to cart
                           </Button>
