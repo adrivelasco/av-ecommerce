@@ -1,4 +1,4 @@
-import { PRODUCT_LIST, PRODUCT, ADD_PRODUCT } from '../constants';
+import { PRODUCT_LIST, PRODUCT, ADD_PRODUCT, CART } from '../constants';
 import Marketplace from '../services/marketplace';
 
 export const getMarketProducts = {
@@ -30,6 +30,29 @@ export const getMarketProducts = {
     });
   }
 };
+
+export function getCart() {
+  return dispatch => {
+    dispatch({
+      type: `${CART}_REQUESST`
+    });
+    return Marketplace.getCart()
+      .then(res => {
+        dispatch({
+          type: `${CART}_SUCCESS`,
+          results: res.body
+        });
+        return res;
+      })
+      .catch(err => {
+        dispatch({
+          type: `${CART}_REJECTED`,
+          error: err
+        });
+        return err;
+      });
+  }
+}
 
 export function addProductToCart(product, quantity) {
   return dispatch => {

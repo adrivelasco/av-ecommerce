@@ -1,4 +1,4 @@
-import { PRODUCT_LIST, PRODUCT } from '../constants';
+import { PRODUCT_LIST, PRODUCT, CART } from '../constants';
 
 const initialState = {
   isFetching: false,
@@ -6,6 +6,28 @@ const initialState = {
   rejected: false,
   results: null
 };
+
+function getCart(state = initialState, action) {
+  switch (action.type) {
+    case `${CART}_REQUEST`:
+      return Object.assign({}, state, {
+        isFetching: true
+      });
+    case `${CART}_SUCCESS`:
+      return Object.assign({}, state, {
+        isFetching: false,
+        results: action.results,
+        success: true
+      });
+    case `${CART}_REJECTED`:
+      return Object.assign({}, state, {
+        isFetching: false,
+        rejected: true
+      });
+    default:
+      return state;
+  }
+}
 
 function getProducts(state = initialState, action) {
   switch (action.type) {
@@ -59,6 +81,6 @@ export default function marketplaceReducer(state = {}, action) {
   return {
     products: getProducts(state.products, action),
     product: getProductById(state.product, action),
-    cart: null
+    cart: getCart(state.cart, action)
   };
 };
