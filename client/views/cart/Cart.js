@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Segment, Item, Header, Button, Icon, Table } from 'semantic-ui-react';
+import { Grid, Segment, Item, Header, Button, Table, Icon } from 'semantic-ui-react';
 
-import { getCart } from '../../actions/marketplace';
+import { formatPrice, priceToNumber } from '../../utils/price';
+import { getCart, removeProduct } from '../../actions/marketplace';
 import s from './Cart.css';
 
 class Cart extends React.Component {
@@ -11,29 +12,23 @@ class Cart extends React.Component {
 
     this.getSubtotal = this.getSubtotal.bind(this);
     this.getTotal = this.getTotal.bind(this);
+    this.removeProduct = this.removeProduct.bind(this);
+  }
+
+  removeProduct(product) {
+    this.props.dispatch(removeProduct(product));
   }
 
   componentWillMount() {
     this.props.dispatch(getCart());
   }
 
-  formatPrice(price, n = 2, x = 3, s = ',', c = '.') {
-    let re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')';
-    let num = price.toFixed(Math.max(0, ~~n));
-    return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
-  }
-
-  priceToNumber(price) {
-    return Number(price.replace(/[^0-9\.-]+/g, ''));
-  }
-
   getSubtotal() {
     let subtotal = 0;
     this.props.marketplace.cart.results.map((product, i) => {
-      let price = this.priceToNumber(product.price);
+      let price = priceToNumber(product.price);
       subtotal = subtotal + (price * product.quantity);
     });
-    console.log(subtotal);
     return subtotal;
   }
 
@@ -45,7 +40,9 @@ class Cart extends React.Component {
   render() {
     const { marketplace, history } = this.props;
     if (marketplace.cart.success) {
-      if (typeof marketplace.cart.results === 'undefined' || marketplace.cart.results.length === 0) {
+      if (typeof marketplace.cart.results === 'undefined' ||
+      marketplace.cart.results === null ||
+      marketplace.cart.results.length === 0) {
         return (
           <div className={s.empty}>
             <Header as="h1" icon>
@@ -73,8 +70,7 @@ class Cart extends React.Component {
                         <Item key={i}>
                           <Item.Image size="small" src={product.picture} />
                           <Item.Content>
-                            <Item.Header>{product.name}</Item.Header>
-                            <Item.Header size="small">{product.company}</Item.Header>
+                            <Item.Header>{product.name} - {product.company}</Item.Header>
                             <Item.Meta>
                               <div className={s.productInfo}>
                                 <p className="price">
@@ -85,11 +81,17 @@ class Cart extends React.Component {
                                 </p>
                                 <p className="quantity">
                                   Total:
-                                  <strong> ${this.formatPrice(product.quantity * this.priceToNumber(product.price))}</strong>
+                                  <strong> ${formatPrice(product.quantity * priceToNumber(product.price))}</strong>
                                 </p>
                               </div>
                             </Item.Meta>
                           </Item.Content>
+                          <div
+                            className={s.close}
+                            onClick={() => this.removeProduct(product)}
+                          >
+                            <Icon name="close" />
+                          </div>
                         </Item>
                       );
                     })}
@@ -102,12 +104,13 @@ class Cart extends React.Component {
                     <Table.Header>
                       <Table.Row>
                         <Table.HeaderCell>Summary</Table.HeaderCell>
+                        <Table.HeaderCell></Table.HeaderCell>
                       </Table.Row>
                     </Table.Header>
                     <Table.Body>
                       <Table.Row>
                         <Table.Cell>Subtotal</Table.Cell>
-                        <Table.Cell>${this.formatPrice(this.getSubtotal())}</Table.Cell>
+                        <Table.Cell>${formatPrice(this.getSubtotal())}</Table.Cell>
                       </Table.Row>
                       <Table.Row>
                         <Table.Cell>Shipping</Table.Cell>
@@ -115,7 +118,7 @@ class Cart extends React.Component {
                       </Table.Row>
                       <Table.Row>
                         <Table.Cell>Total</Table.Cell>
-                        <Table.Cell>${this.formatPrice(this.getTotal())}</Table.Cell>
+                        <Table.Cell>${formatPrice(this.getTotal())}</Table.Cell>
                       </Table.Row>
                     </Table.Body>
                   </Table>

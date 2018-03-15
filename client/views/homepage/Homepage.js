@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Loader, Icon, Button, Image as ImageComponent, Item, Pagination, Grid } from 'semantic-ui-react';
+import { Button, Image as ImageComponent, Item, Pagination, Grid } from 'semantic-ui-react';
 
+import Loading from '../../components/Loading/Loading';
 import { getMarketProducts } from '../../actions/marketplace';
 import s from './Homepage.css';
 
@@ -45,18 +46,10 @@ class Homepage extends React.Component {
   }
 
   render() {
-    const { marketplace, history } = this.props;
+    const { marketplace } = this.props;
 
     if (marketplace.products.isFetching) {
-      return (
-        <div className={s.loader}>
-          <Loader
-            active
-            inline='centered'
-            size="big"
-          />
-        </div>
-      );
+      return <Loading />;
     }
 
     if (marketplace.products.success) {
@@ -95,7 +88,7 @@ class Homepage extends React.Component {
                               <strong>{product.price}</strong>
                             </span>
                           </Item.Meta>
-                          <Item.Header as='a'>{product.name}</Item.Header>
+                          <Item.Header as="a">{product.name}</Item.Header>
                           <Item.Meta>
                             <span>{product.company}</span>
                           </Item.Meta>

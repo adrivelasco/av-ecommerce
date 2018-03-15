@@ -23,8 +23,7 @@ const Layout = ({ children, history, location }) => {
                 onClick={() => history.push('/cart')}
                 active={location.pathname === '/cart'}
               >
-                <Icon name="shop" />
-                My cart
+                <Icon className={s.shopIcon} style={{ margin: '0' }} name="shop" />
               </Button>
             </Menu.Item>
           </Menu.Menu>

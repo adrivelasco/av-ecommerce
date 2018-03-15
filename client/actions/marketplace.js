@@ -1,4 +1,4 @@
-import { PRODUCT_LIST, PRODUCT, ADD_PRODUCT, CART } from '../constants';
+import { PRODUCT_LIST, PRODUCT, ADD_PRODUCT, CART, REMOVE_PRODUCT } from '../constants';
 import Marketplace from '../services/marketplace';
 
 export const getMarketProducts = {
@@ -52,6 +52,27 @@ export function getCart() {
         return err;
       });
   }
+}
+
+export function removeProduct(product) {
+  return dispatch => {
+    dispatch({
+      type: `${REMOVE_PRODUCT}_REQUEST`
+    });
+    return Marketplace.removeProductFromCart(product)
+      .then(res => {
+        dispatch({
+          type: `${REMOVE_PRODUCT}_SUCCESS`
+        });
+        return res;
+      })
+      .catch(err => {
+        dispatch({
+          type: `${REMOVE_PRODUCT}_REJECT`,
+          err: err
+        });
+      });
+  };
 }
 
 export function addProductToCart(product, quantity) {

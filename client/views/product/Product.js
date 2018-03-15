@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Button, Segment, Grid, Header, Image, Input, Breadcrumb, Modal, Icon } from 'semantic-ui-react';
 
+import Loading from '../../components/Loading/Loading';
+import { formatPrice, priceToNumber } from '../../utils/price';
 import { getProductById, addProductToCart } from '../../actions/marketplace';
 import s from './Product.css';
 
@@ -64,6 +66,11 @@ class Product extends React.Component {
 
   render() {
     const { marketplace, history } = this.props;
+
+    if (marketplace.products.isFetching) {
+      return <Loading />;
+    }
+
     if (marketplace.product.success) {
       const prod = marketplace.product.results;
       return (
@@ -75,7 +82,7 @@ class Product extends React.Component {
                 Added to Cart
                 <Header.Subheader>
                   Subtotal ({this.state.quantity} item{this.state.quantity > 1 && 's'}):
-                  <strong> ${this.state.quantity * Number(prod.price.replace(/[^0-9\.-]+/g, ''))}</strong>
+                  <strong> ${formatPrice(this.state.quantity * priceToNumber(prod.price))}</strong>
                 </Header.Subheader>
               </Header.Content>
             </Header>
@@ -97,7 +104,7 @@ class Product extends React.Component {
               </Button>
             </div>
           </Modal>
-          <Segment style={{ padding: '4em 0em' }} vertical>
+          <Segment style={{ padding: '3em 0em' }} vertical>
             <Grid container stackable verticalAlign='middle'>
               <Grid.Row>
                 <Grid.Column width={12}>

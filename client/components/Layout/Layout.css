@@ -2,3 +2,7 @@
   position: relative;
   padding: 50px 0;
 }
+
+.shop-icon {
+  opacity: 1 !important;
+}

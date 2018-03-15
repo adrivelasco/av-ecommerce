@@ -4,6 +4,7 @@ const MarketPlaceModel = require('./marketplace.model');
 
 const MarketPlaceController = {
   getProducts: async (req, res, next) => {
+    // Get all products of marketplace
     try {
       const productList = await MarketPlaceModel.getProducts();
       res.json(productList);
@@ -13,6 +14,7 @@ const MarketPlaceController = {
   },
 
   getCart: (req, res, next) => {
+    // Get all products of cart
     try {
       res.json({
         statusCode: 200,
@@ -27,8 +29,7 @@ const MarketPlaceController = {
     try {
       // Delete product from session
       if (req.session.cart && req.session.cart.length > 0) {
-        // TO-DO: Remove from cart
-        console.log('Remove');
+        req.session.cart = req.session.cart.filter(({ _id }) => req.body._id !== _id);
       } else {
         req.session.cart = [req.body];
       }
@@ -48,8 +49,14 @@ const MarketPlaceController = {
       // Store product on session
       if (req.session.cart && req.session.cart.length > 0) {
         let productExists = req.session.cart.find(({ _id }) => req.body._id === _id);
+        // If product exists just increase quantity
+        // else add the new product to cart
         if (productExists) {
-          productExists = productExists.quantity + req.body.quantity;
+          let newCart = req.session.cart.filter(({ _id }) => req.body._id !== _id);
+          newCart.push(Object.assign, productExists, {
+            quantity: productExists + req.body.quantity
+          });
+          req.session.cart = newCart;
         } else {
           req.session.cart.push(req.body);
         }

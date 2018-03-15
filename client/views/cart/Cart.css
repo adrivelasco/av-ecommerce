@@ -21,3 +21,18 @@
     display: block;
   }
 }
+
+.close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 1;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 25px;
+  opacity: 0.7;
+  cursor: pointer;
+}
