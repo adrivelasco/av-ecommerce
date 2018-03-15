@@ -1,0 +1,23 @@
+.root {
+  padding: 35px 0;
+  position: relative;
+}
+
+.empty {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.product-info {
+  position: relative;
+  p {
+    display: block;
+  }
+}
