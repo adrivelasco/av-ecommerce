@@ -16,6 +16,7 @@ Universal React App built on top of [Node.js](https://nodejs.org/), [Express](ht
 ````bash
 git clone git@github.com:adrvelasco/av-ecommerce.git
 cd av-ecommerce
+npm install -g webpack
 npm install
 ````
 

@@ -15,8 +15,9 @@ class Cart extends React.Component {
     this.removeProduct = this.removeProduct.bind(this);
   }
 
-  removeProduct(product) {
-    this.props.dispatch(removeProduct(product));
+  async removeProduct(product) {
+    await this.props.dispatch(removeProduct(product));
+    this.props.dispatch(getCart());
   }
 
   componentWillMount() {
