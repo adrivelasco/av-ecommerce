@@ -1,4 +1,4 @@
-import { PRODUCT_LIST, PRODUCT } from '../constants';
+import { PRODUCT_LIST, PRODUCT, ADD_PRODUCT } from '../constants';
 import Marketplace from '../services/marketplace';
 
 export const getMarketProducts = {
@@ -30,6 +30,29 @@ export const getMarketProducts = {
     });
   }
 };
+
+export function addProductToCart(product, quantity) {
+  return dispatch => {
+    dispatch({
+      type: `${ADD_PRODUCT}_REQUEST`
+    });
+    return Marketplace.addProductToCart(product, quantity)
+      .then(res => {
+        dispatch({
+          type: `${ADD_PRODUCT}_SUCCESS`,
+          results: res.body
+        });
+        return res;
+      })
+      .catch(err => {
+        dispatch({
+          type: `${ADD_PRODUCT}_REJECTED`,
+          error: err
+        });
+        return err;
+      });
+  };
+}
 
 export const getProductById = {
   fetch: ({ productId, productList }) => dispatch => {
