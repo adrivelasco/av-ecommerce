@@ -2,11 +2,16 @@
   display: flex;
   justify-content: space-between;
   margin-top: 35px;
+  align-items: center;
 }
 
 .controls-quantity {
   position: relative;
+}
+
+.inputs {
   display: flex;
+  position: relative;
 }
 
 .input-quantity {

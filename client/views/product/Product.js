@@ -22,7 +22,7 @@ class Product extends React.Component {
 
   componentWillMount() {
     const { dispatch, marketplace, match } = this.props;
-    if (!marketplace.product.success || marketplace.product._id != match.params.id) {
+    if (!marketplace.product.success || marketplace.product._id != match.params.productId) {
       dispatch(getProductById.fetch({
         productId: match.params.productId,
         productList: marketplace.products.success
@@ -127,19 +127,27 @@ class Product extends React.Component {
                   </p>
                   <div className={s.controls}>
                     <div className={s.controlsQuantity}>
-                      <Button.Group>
-                        <Button
-                          icon="minus"
-                          onClick={this.decreaseQuantity}
-                        />
-                        <Button
-                          icon="plus"
-                          onClick={this.increaseQuantity}
-                        />
-                      </Button.Group>
-                      <Input size="large" className={s.inputQuantity}>
-                        {this.state.quantity}
-                      </Input>
+                      <p>Stock: <strong>{prod.stock} unit/s</strong></p>
+                      {prod.stock !== 0
+                        ? (
+                          <div className={s.inputs}>
+                            <Button.Group>
+                              <Button
+                                icon="minus"
+                                onClick={this.decreaseQuantity}
+                              />
+                              <Button
+                                icon="plus"
+                                onClick={this.increaseQuantity}
+                              />
+                            </Button.Group>
+                            <Input size="large" className={s.inputQuantity}>
+                              {this.state.quantity}
+                            </Input>
+                          </div>
+                        )
+                        : 'Sin stock'
+                      }
                     </div>
                     <Button primary onClick={this.addToCart}>Add to cart</Button>
                   </div>
