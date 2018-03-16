@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Grid, Segment, Item, Header, Button, Table, Icon } from 'semantic-ui-react';
+import { Grid, Segment, Item, Header, Button, Table, Icon, Popup } from 'semantic-ui-react';
 
 import { formatPrice, priceToNumber } from '../../utils/price';
 import { getCart, removeProduct } from '../../actions/marketplace';
@@ -64,11 +64,11 @@ class Cart extends React.Component {
           <Grid>
             <Grid.Row columns={2}>
               <Grid.Column width={10}>
-                <div>
+                <Segment>
                   <Item.Group divided>
                     {marketplace.cart.results.map((product, i) => {
                       return (
-                        <Item key={i}>
+                        <Item key={i} style={{ position: 'relative' }}>
                           <Item.Image size="small" src={product.picture} />
                           <Item.Content>
                             <Item.Header>{product.name} - {product.company}</Item.Header>
@@ -87,17 +87,24 @@ class Cart extends React.Component {
                               </div>
                             </Item.Meta>
                           </Item.Content>
-                          <div
-                            className={s.close}
-                            onClick={() => this.removeProduct(product)}
-                          >
-                            <Icon name="close" />
-                          </div>
+                          <Popup
+                            size="mini"
+                            trigger={
+                              <div
+                                className={s.close}
+                                onClick={() => this.removeProduct(product)}
+                              >
+                                <Icon className={s.icon} name="close" />
+                              </div>
+                            }
+                            content="Remove product"
+                            inverted
+                          />
                         </Item>
                       );
                     })}
                   </Item.Group>
-                </div>
+                </Segment>
               </Grid.Column>
               <Grid.Column width={6}>
                 <Segment>
