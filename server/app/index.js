@@ -3,7 +3,7 @@
 const express = require('express');
 const history = require('connect-history-api-fallback');
 const compression = require('compression');
-const session = require('cookie-session');
+const session = require('client-sessions');
 const cookieParser = require('cookie-parser');
 const sanitized = require('express-sanitized');
 const bodyParser = require('body-parser');
@@ -38,8 +38,11 @@ app.use(
   session({
     name: 'session',
     secret: '4V3C0MM3RC3',
+    requestKey: 'session',
     secure: true,
-    maxAge: 365 * 24 * 60 * 60 * 1000 * 5
+    cookie: {
+      maxAge: 365 * 24 * 60 * 60 * 1000 * 5
+    }
   })
 );
 
