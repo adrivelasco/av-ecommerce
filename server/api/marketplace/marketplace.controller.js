@@ -18,7 +18,9 @@ const MarketPlaceController = {
     try {
       res.json({
         statusCode: 200,
-        body: req.session.cart
+        body: req.session.cart !== null
+          ? req.session.cart
+          : []
       });
     } catch (err) {
       next(err);
@@ -53,9 +55,9 @@ const MarketPlaceController = {
         // else add the new product to cart
         if (productExists) {
           let newCart = req.session.cart.filter(({ _id }) => req.body._id !== _id);
-          newCart.push(Object.assign, productExists, {
-            quantity: productExists + req.body.quantity
-          });
+          newCart.push(Object.assign({}, productExists, {
+            quantity: productExists.quantity + req.body.quantity
+          }));
           req.session.cart = newCart;
         } else {
           req.session.cart.push(req.body);
