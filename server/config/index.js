@@ -2,7 +2,7 @@
 
 const config = {
   env: process.env.NODE_ENV || 'production',
-  port: process.env.PORT || 5001,
+  port: process.env.PORT || 3002,
   apiMarketPlace: 'https://api.myjson.com/bins/wyjyh',
   apiBasePath: '/',
   app: {
