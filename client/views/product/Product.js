@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, Segment, Grid, Header, Image, Input, Breadcrumb, Modal, Icon } from 'semantic-ui-react';
+import { Button, Segment, Grid, Header, Image, Input, Breadcrumb, Modal, Icon, Message, Divider } from 'semantic-ui-react';
 
 import Loading from '../../components/Loading/Loading';
 import { formatPrice, priceToNumber } from '../../utils/price';
@@ -116,47 +116,55 @@ class Product extends React.Component {
                 </Grid.Column>
               </Grid.Row>
               <Grid.Row>
-                <Grid.Column floated="left" width={6}>
+                <Grid.Column width={7}>
                   <Image size='large' src={prod.picture} />
                 </Grid.Column>
                 <Grid.Column width={8}>
-                  <Header as="h1" style={{ fontSize: '2em' }}>
-                    {prod.name}
-                  </Header>
-                  <Header.Subheader>
-                    {prod.company}
-                  </Header.Subheader>
-                  <Header as="h2" style={{ fontSize: '2em' }} color="grey">
-                    {prod.price}
-                  </Header>
-                  <p>
-                    {prod.description}
-                  </p>
+                  <Header as="h1" style={{ fontSize: '2em' }}>{prod.name}</Header>
+                  <Header.Subheader>{prod.company}</Header.Subheader>
+                  <Header as="h2" style={{ fontSize: '2em' }} color="grey">{prod.price}</Header>
+                  <p>{prod.description}</p>
+                  <br/>
+                  <Divider className={s.divider} />
+                  <br/>
                   <div className={s.controls}>
                     <div className={s.controlsQuantity}>
-                      <p>Stock: <strong>{prod.stock} unit/s</strong></p>
                       {prod.stock !== 0
-                        ? (
-                          <div className={s.inputs}>
-                            <Button.Group>
-                              <Button
-                                icon="minus"
-                                onClick={this.decreaseQuantity}
-                              />
-                              <Button
-                                icon="plus"
-                                onClick={this.increaseQuantity}
-                              />
-                            </Button.Group>
-                            <Input size="large" className={s.inputQuantity}>
-                              {this.state.quantity}
-                            </Input>
-                          </div>
+                        ? <p>Stock: <strong>{prod.stock} unit/s</strong></p>
+                        : (
+                          <Message
+                            error
+                            size="tiny"
+                            content="Product not available"
+                          />
                         )
-                        : 'Sin stock'
                       }
+                      {prod.stock !== 0 && (
+                        <div className={s.inputs}>
+                          <Button.Group>
+                            <Button
+                              icon="minus"
+                              onClick={this.decreaseQuantity}
+                            />
+                            <Button
+                              icon="plus"
+                              onClick={this.increaseQuantity}
+                            />
+                          </Button.Group>
+                          <Input size="large" className={s.inputQuantity}>
+                            {this.state.quantity}
+                          </Input>
+                        </div>
+                      )}
                     </div>
-                    <Button primary onClick={this.addToCart}>Add to cart</Button>
+                    <Button
+                      size="large"
+                      disabled={prod.stock === 0}
+                      primary
+                      onClick={this.addToCart}
+                    >
+                      Add to Cart
+                    </Button>
                   </div>
                 </Grid.Column>
               </Grid.Row>

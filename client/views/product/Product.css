@@ -1,8 +1,11 @@
 .controls {
   display: flex;
   justify-content: space-between;
-  margin-top: 35px;
   align-items: center;
+}
+
+.divider {
+  margin: 40px auto;
 }
 
 .controls-quantity {
