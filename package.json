@@ -35,6 +35,7 @@
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "classnames": "^2.2.5",
+    "client-sessions": "^0.8.0",
     "connect-redis": "^3.3.3",
     "cookie-session": "^2.0.0-beta.3",
     "dotenv": "^5.0.1",
