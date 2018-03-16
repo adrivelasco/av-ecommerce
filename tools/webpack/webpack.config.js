@@ -73,7 +73,25 @@ const config = {
       ]
       : [
         // Decrease script evaluation time
-        new webpack.optimize.ModuleConcatenationPlugin()
+        new webpack.optimize.ModuleConcatenationPlugin(),
+
+        // Minimize all JavaScript output of chunks
+        new webpack.optimize.UglifyJsPlugin({
+          sourceMap: true,
+          compress: {
+            screw_ie8: true,
+            warnings: isVerbose,
+            unused: true,
+            dead_code: true
+          },
+          mangle: {
+            screw_ie8: true
+          },
+          output: {
+            comments: false,
+            screw_ie8: true
+          }
+        })
       ])
   ],
   module: {
