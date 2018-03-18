@@ -15,8 +15,8 @@ class Homepage extends React.Component {
     };
 
     this.createGroupedArray = this.createGroupedArray.bind(this);
-    this.onPageChange = this.onPageChange.bind(this);
-    this.onProductClick = this.onProductClick.bind(this);
+    this._onPageChange = this._onPageChange.bind(this);
+    this._onProductClick = this._onProductClick.bind(this);
   }
 
   createGroupedArray(arr, chunkSize) {
@@ -33,16 +33,6 @@ class Homepage extends React.Component {
       !this.props.marketplace.products.isFetching) {
       this.props.dispatch(getMarketProducts.fetch());
     }
-  }
-
-  onPageChange(e, data) {
-    this.setState({
-      page: data.activePage
-    });
-  }
-
-  onProductClick(e, product) {
-    return this.props.history.push(`/${product._id}-${product.name}`);
   }
 
   render() {
@@ -65,7 +55,7 @@ class Homepage extends React.Component {
               firstItem={null}
               defaultActivePage={this.state.page}
               totalPages={groupedArr.length}
-              onPageChange={this.onPageChange}
+              _onPageChange={this._onPageChange}
               size="tiny"
             />
           </div>
@@ -79,7 +69,7 @@ class Homepage extends React.Component {
                         as="a"
                         className={s.itemImage}
                         src={product.picture}
-                        onClick={(e) => this.onProductClick(e, product)}
+                        onClick={(e) => this._onProductClick(e, product)}
                       />
                       <Item.Content className={s.itemContent}>
                         <div className={s.itemInfo}>
@@ -96,7 +86,7 @@ class Homepage extends React.Component {
                         <Item.Extra>
                           <Button
                             primary
-                            onClick={(e) => this.onProductClick(e, product)}
+                            onClick={(e) => this._onProductClick(e, product)}
                           >
                             Add to cart
                           </Button>
@@ -113,9 +103,19 @@ class Homepage extends React.Component {
     }
     return null;
   }
+
+  _onPageChange(e, data) {
+    this.setState({
+      page: data.activePage
+    });
+  }
+
+  _onProductClick(e, product) {
+    return this.props.history.push(`/${product._id}-${product.name}`);
+  }
 };
 
-const mapStateToProps = (state) => {
+function mapStateToProps(state) {
   return {
     marketplace: state.marketplace
   };

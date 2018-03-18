@@ -16,10 +16,10 @@ class Product extends React.Component {
       requested: false
     };
 
-    this.addToCart = this.addToCart.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-    this.increaseQuantity = this.increaseQuantity.bind(this);
-    this.decreaseQuantity = this.decreaseQuantity.bind(this);
+    this._addToCart = this._addToCart.bind(this);
+    this._closeModal = this._closeModal.bind(this);
+    this._increaseQuantity = this._increaseQuantity.bind(this);
+    this._decreaseQuantity = this._decreaseQuantity.bind(this);
   }
 
   componentWillMount() {
@@ -31,36 +31,6 @@ class Product extends React.Component {
           ? marketplace.products.results
           : []
       }));
-    }
-  }
-
-  addToCart(e) {
-    this.props.dispatch(
-      addProductToCart(this.props.marketplace.product.results, this.state.quantity));
-    this.setState({
-      requested: true
-    });
-  }
-
-  closeModal(e) {
-    this.setState({
-      requested: false
-    });
-  }
-
-  increaseQuantity(e) {
-    if (this.props.marketplace.product.results.stock > this.state.quantity) {
-      this.setState({
-        quantity: this.state.quantity + 1
-      });
-    }
-  }
-
-  decreaseQuantity(e) {
-    if (this.state.quantity > 1) {
-      this.setState({
-        quantity: this.state.quantity - 1
-      });
     }
   }
 
@@ -98,7 +68,7 @@ class Product extends React.Component {
               <Button
                 fluid
                 secondary
-                onClick={this.closeModal}
+                onClick={this._closeModal}
               >
                 Keep shopping
               </Button>
@@ -144,11 +114,11 @@ class Product extends React.Component {
                           <Button.Group>
                             <Button
                               icon="minus"
-                              onClick={this.decreaseQuantity}
+                              onClick={this._decreaseQuantity}
                             />
                             <Button
                               icon="plus"
-                              onClick={this.increaseQuantity}
+                              onClick={this._increaseQuantity}
                             />
                           </Button.Group>
                           <Input size="large" className={s.inputQuantity}>
@@ -161,7 +131,7 @@ class Product extends React.Component {
                       size="large"
                       disabled={prod.stock === 0}
                       primary
-                      onClick={this.addToCart}
+                      onClick={this._addToCart}
                     >
                       Add to Cart
                     </Button>
@@ -175,9 +145,39 @@ class Product extends React.Component {
     }
     return null;
   }
+
+  _addToCart(e) {
+    this.props.dispatch(
+      addProductToCart(this.props.marketplace.product.results, this.state.quantity));
+    this.setState({
+      requested: true
+    });
+  }
+
+  _closeModal(e) {
+    this.setState({
+      requested: false
+    });
+  }
+
+  _increaseQuantity(e) {
+    if (this.props.marketplace.product.results.stock > this.state.quantity) {
+      this.setState({
+        quantity: this.state.quantity + 1
+      });
+    }
+  }
+
+  _decreaseQuantity(e) {
+    if (this.state.quantity > 1) {
+      this.setState({
+        quantity: this.state.quantity - 1
+      });
+    }
+  }
 };
 
-const mapStateToProps = (state) => {
+function mapStateToProps(state) {
   return {
     marketplace: state.marketplace
   };

@@ -1,3 +1,6 @@
+// Needed for redux-saga es6 generator support
+import 'babel-polyfill';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import FastClick from 'fastclick';

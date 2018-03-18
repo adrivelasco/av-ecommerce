@@ -12,12 +12,7 @@ class Cart extends React.Component {
 
     this.getSubtotal = this.getSubtotal.bind(this);
     this.getTotal = this.getTotal.bind(this);
-    this.removeProduct = this.removeProduct.bind(this);
-  }
-
-  async removeProduct(product) {
-    await this.props.dispatch(removeProduct(product));
-    this.props.dispatch(getCart());
+    this._removeProduct = this._removeProduct.bind(this);
   }
 
   componentWillMount() {
@@ -92,7 +87,7 @@ class Cart extends React.Component {
                             trigger={
                               <div
                                 className={s.close}
-                                onClick={() => this.removeProduct(product)}
+                                onClick={() => this._removeProduct(product)}
                               >
                                 <Icon className={s.icon} name="close" />
                               </div>
@@ -142,9 +137,14 @@ class Cart extends React.Component {
     }
     return null;
   }
+
+  async _removeProduct(product) {
+    await this.props.dispatch(removeProduct(product));
+    this.props.dispatch(getCart());
+  }
 }
 
-const mapStateToProps = (state) => {
+function mapStateToProps(state) {
   return {
     marketplace: state.marketplace
   };
