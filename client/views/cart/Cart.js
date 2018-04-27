@@ -1,21 +1,40 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Grid, Segment, Item, Header, Button, Table, Icon, Popup } from 'semantic-ui-react';
 
 import { formatPrice, priceToNumber } from '../../utils/price';
 import { getCart, removeProduct } from '../../actions/marketplace';
-import s from './Cart.css';
+import styles from './Cart.css';
 
 class Cart extends React.Component {
+  static propTypes = {
+    marketplace: PropTypes.shape({
+      cart: PropTypes.shape({
+        success: PropTypes.bool,
+        results: PropTypes.arrayOf(PropTypes.shape({
+          picture: PropTypes.string,
+          name: PropTypes.string,
+          company: PropTypes.string,
+          price: PropTypes.string,
+          description: PropTypes.string,
+          stock: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+          quantity: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        }))
+      }).isRequired
+    }).isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func
+    }).isRequired
+  };
+
   constructor(props) {
     super(props);
 
-    this.getSubtotal = this.getSubtotal.bind(this);
-    this.getTotal = this.getTotal.bind(this);
     this._removeProduct = this._removeProduct.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.dispatch(getCart());
   }
 
@@ -40,7 +59,7 @@ class Cart extends React.Component {
       marketplace.cart.results === null ||
       marketplace.cart.results.length === 0) {
         return (
-          <div className={s.empty}>
+          <div className={styles.empty}>
             <Header as="h1" icon>
               Your cart is empty
               <Header.Subheader>
@@ -55,7 +74,7 @@ class Cart extends React.Component {
         );
       }
       return (
-        <div className={s.root}>
+        <div className={styles.root}>
           <Grid>
             <Grid.Row columns={2}>
               <Grid.Column width={10}>
@@ -68,7 +87,7 @@ class Cart extends React.Component {
                           <Item.Content>
                             <Item.Header>{product.name} - {product.company}</Item.Header>
                             <Item.Meta>
-                              <div className={s.productInfo}>
+                              <div className={styles.productInfo}>
                                 <p className="price">
                                   Subtotal: <strong>{product.price}</strong>
                                 </p>
@@ -86,10 +105,10 @@ class Cart extends React.Component {
                             size="mini"
                             trigger={
                               <div
-                                className={s.close}
+                                className={styles.close}
                                 onClick={() => this._removeProduct(product)}
                               >
-                                <Icon className={s.icon} name="close" />
+                                <Icon className={styles.icon} name="close" />
                               </div>
                             }
                             content="Remove product"

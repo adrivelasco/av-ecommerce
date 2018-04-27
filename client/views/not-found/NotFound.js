@@ -1,11 +1,11 @@
 import React from 'react';
-import { Header, Icon, Button } from 'semantic-ui-react'
+import { Header, Icon, Button } from 'semantic-ui-react';
 
-import s from './NotFound.css';
+import styles from './NotFound.css';
 
 const NotFound = ({ history }) => {
   return (
-    <div className={s.root}>
+    <div className={styles.root}>
       <Header as="h1" icon>
         <Icon name="warning" />
         404

@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Container, Button, Menu, Icon } from 'semantic-ui-react';
 
-import s from './Layout.css';
+import styles from './Layout.css';
 
 const Layout = ({ children, history, location }) => {
   return (
-    <div className={s.root}>
+    <div className={styles.root}>
       <Menu fixed="top" inverted>
         <Container>
           <Menu.Item header>
@@ -23,7 +24,7 @@ const Layout = ({ children, history, location }) => {
                 onClick={() => history.push('/cart')}
                 active={location.pathname === '/cart'}
               >
-                <Icon className={s.shopIcon} style={{ margin: '0' }} name="shop" />
+                <Icon className={styles.shopIcon} style={{ margin: '0' }} name="shop" />
               </Button>
             </Menu.Item>
           </Menu.Menu>
@@ -34,6 +35,16 @@ const Layout = ({ children, history, location }) => {
       </Container>
     </div>
   );
+};
+
+Layout.propTypes = {
+  children: PropTypes.node.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func
+  }).isRequired,
+  location: PropTypes.shape({
+    pathname: PropTypes.string.isRequired
+  }).isRequired
 };
 
 export default Layout;

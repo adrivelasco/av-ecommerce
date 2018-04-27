@@ -1,10 +1,10 @@
 import React from 'react';
 import { Loader } from 'semantic-ui-react';
 
-import s from './Loading.css';
+import styles from './Loading.css';
 
 const Loading = () => (
-  <div className={s.root}>
+  <div className={styles.root}>
     <Loader
       active
       inline="centered"

@@ -1,7 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 
 class ScrollToTop extends React.Component {
+  static propTypes = {
+    children: PropTypes.node.isRequired,
+    location: PropTypes.object.isRequired
+  };
+
   componentDidUpdate(prevProps) {
     if (this.props.location !== prevProps.location) {
       window.scrollTo(0, 0);

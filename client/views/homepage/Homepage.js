@@ -1,12 +1,33 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Image as ImageComponent, Item, Pagination, Grid } from 'semantic-ui-react';
 
 import Loading from '../../components/Loading/Loading';
 import { getMarketProducts } from '../../actions/marketplace';
-import s from './Homepage.css';
+import styles from './Homepage.css';
 
 class Homepage extends React.Component {
+  static propTypes = {
+    marketplace: PropTypes.shape({
+      products: PropTypes.shape({
+        success: PropTypes.bool,
+        isFetching: PropTypes.bool,
+        results: PropTypes.arrayOf(PropTypes.shape({
+          picture: PropTypes.string,
+          name: PropTypes.string,
+          company: PropTypes.string,
+          price: PropTypes.string,
+          description: PropTypes.string,
+          stock: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        }))
+      }).isRequired
+    }).isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func
+    }).isRequired
+  };
+
   constructor(props) {
     super(props);
 
@@ -14,7 +35,6 @@ class Homepage extends React.Component {
       page: 1
     };
 
-    this.createGroupedArray = this.createGroupedArray.bind(this);
     this._onPageChange = this._onPageChange.bind(this);
     this._onProductClick = this._onProductClick.bind(this);
   }
@@ -28,9 +48,8 @@ class Homepage extends React.Component {
     return groups;
   }
 
-  componentWillMount() {
-    if (!this.props.marketplace.products.success &&
-      !this.props.marketplace.products.isFetching) {
+  componentDidMount() {
+    if (!this.props.marketplace.products.success && !this.props.marketplace.products.isFetching) {
       this.props.dispatch(getMarketProducts.fetch());
     }
   }
@@ -45,8 +64,8 @@ class Homepage extends React.Component {
     if (marketplace.products.success) {
       const groupedArr = this.createGroupedArray(marketplace.products.results, 8);
       return (
-        <div className={s.root}>
-          <div className={s.pagination}>
+        <div className={styles.root}>
+          <div className={styles.pagination}>
             <div>
               <p>Búsqueda: <strong>{marketplace.products.results.length}</strong> resultados encontrados</p>
             </div>
@@ -55,7 +74,7 @@ class Homepage extends React.Component {
               firstItem={null}
               defaultActivePage={this.state.page}
               totalPages={groupedArr.length}
-              _onPageChange={this._onPageChange}
+              onPageChange={this._onPageChange}
               size="tiny"
             />
           </div>
@@ -64,17 +83,17 @@ class Homepage extends React.Component {
               {groupedArr[this.state.page - 1].map((product, i) => {
                 return (
                   <Grid.Column key={product._id}>
-                    <Item key={product._id} className={s.item}>
+                    <Item key={product._id} className={styles.item}>
                       <Item.Image
                         as="a"
-                        className={s.itemImage}
+                        className={styles.itemImage}
                         src={product.picture}
                         onClick={(e) => this._onProductClick(e, product)}
                       />
-                      <Item.Content className={s.itemContent}>
-                        <div className={s.itemInfo}>
+                      <Item.Content className={styles.itemContent}>
+                        <div className={styles.itemInfo}>
                           <Item.Meta>
-                            <span className={s.itemPrice}>
+                            <span className={styles.itemPrice}>
                               <strong>{product.price}</strong>
                             </span>
                           </Item.Meta>

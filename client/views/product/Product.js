@@ -1,13 +1,37 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Button, Segment, Grid, Header, Image, Input, Breadcrumb, Modal, Icon, Message, Divider } from 'semantic-ui-react';
 
 import Loading from '../../components/Loading/Loading';
 import { formatPrice, priceToNumber } from '../../utils/price';
 import { getProductById, addProductToCart } from '../../actions/marketplace';
-import s from './Product.css';
+import styles from './Product.css';
 
 class Product extends React.Component {
+  static propTypes = {
+    marketplace: PropTypes.shape({
+      products: PropTypes.shape({
+        success: PropTypes.bool,
+        results: PropTypes.arrayOf(PropTypes.shape({
+          picture: PropTypes.string,
+          name: PropTypes.string,
+          company: PropTypes.string,
+          price: PropTypes.string,
+          description: PropTypes.string,
+          stock: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        }))
+      }).isRequired,
+      product: PropTypes.shape({
+        success: PropTypes.bool,
+        _id: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      }).isRequired
+    }).isRequired,
+    history: PropTypes.shape({
+      push: PropTypes.func
+    }).isRequired
+  };
+
   constructor(props) {
     super(props);
 
@@ -22,7 +46,7 @@ class Product extends React.Component {
     this._decreaseQuantity = this._decreaseQuantity.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     const { dispatch, marketplace, match } = this.props;
     if (!marketplace.product.success || marketplace.product._id != match.params.productId) {
       dispatch(getProductById.fetch({
@@ -44,7 +68,7 @@ class Product extends React.Component {
     if (marketplace.product.success) {
       const prod = marketplace.product.results;
       return (
-        <div className={s.root}>
+        <div className={styles.root}>
           <Modal open={this.state.requested} size="mini">
             <Header as="h2">
               <Icon color="green" name="check" />
@@ -56,7 +80,7 @@ class Product extends React.Component {
                 </Header.Subheader>
               </Header.Content>
             </Header>
-            <div className={s.modalActions}>
+            <div className={styles.modalActions}>
               <Button
                 fluid
                 primary
@@ -95,10 +119,10 @@ class Product extends React.Component {
                   <Header as="h2" style={{ fontSize: '2em' }} color="grey">{prod.price}</Header>
                   <p>{prod.description}</p>
                   <br/>
-                  <Divider className={s.divider} />
+                  <Divider className={styles.divider} />
                   <br/>
-                  <div className={s.controls}>
-                    <div className={s.controlsQuantity}>
+                  <div className={styles.controls}>
+                    <div className={styles.controlsQuantity}>
                       {prod.stock !== 0
                         ? <p>Stock: <strong>{prod.stock} unit/s</strong></p>
                         : (
@@ -110,7 +134,7 @@ class Product extends React.Component {
                         )
                       }
                       {prod.stock !== 0 && (
-                        <div className={s.inputs}>
+                        <div className={styles.inputs}>
                           <Button.Group>
                             <Button
                               icon="minus"
@@ -121,7 +145,7 @@ class Product extends React.Component {
                               onClick={this._increaseQuantity}
                             />
                           </Button.Group>
-                          <Input size="large" className={s.inputQuantity}>
+                          <Input size="large" className={styles.inputQuantity}>
                             {this.state.quantity}
                           </Input>
                         </div>
