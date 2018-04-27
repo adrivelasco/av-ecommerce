@@ -35,14 +35,14 @@ const config = {
   output: {
     path: path.resolve(__dirname, '../../build/static'),
     publicPath: '/static/',
-    filename: 'js/[name].[hash:8].js',
-    chunkFilename: 'js/[name].[hash:8].js'
+    filename: isDebug ? 'js/[name].js' : 'js/[name].[hash:8].js',
+    chunkFilename: isDebug ? 'js/[name].chunk.js' : 'js/[name].[hash:8].chunk.js'
   },
 
   plugins: [
     // Extract all CSS files and compile it on a single file
     new ExtractTextPlugin({
-      filename: '[name].[contenthash:base64:8].css',
+      filename: isDebug ? '[name].css' : '[name].[contenthash:base64:8].css',
       publicPath: '/static/css',
       allChunks: true
     }),
