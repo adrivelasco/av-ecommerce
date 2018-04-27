@@ -12,9 +12,11 @@ api.use('/', routes);
 
 // Error Handler
 api.use((error, req, res, next) => {
-  logger.error(`Status Code: ${error.statusCode || httpStatus.INTERNAL_SERVER_ERROR}` +
-  ` || Message: ${error.message}`);
-  res.send('ERROR');
+  const statusCode = error.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
+  const errorMsg = error.message;
+
+  logger.error(`Status Code: ${statusCode} || Message: ${errorMsg}`);
+  res.send({ statusCode, error: errorMsg });
 });
 
 module.exports = api;
