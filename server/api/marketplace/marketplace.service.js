@@ -1,6 +1,6 @@
 'use strict';
 
-const requestPromise = require('request-promise');
+const rp = require('request-promise');
 const config = require('../../config');
 
 const MarketPlaceService = {
@@ -17,7 +17,7 @@ const MarketPlaceService = {
       resolveWithFullResponse: true
     };
     try {
-      const response = await requestPromise(options);
+      const response = await rp(options);
       return Promise.resolve(response);
     } catch (error) {
       return Promise.reject(error);
