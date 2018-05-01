@@ -8,19 +8,23 @@ const cookieParser = require('cookie-parser');
 const sanitized = require('express-sanitized');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
+const { graphqlExpress, graphiqlExpress } = require('apollo-server-express');
+
+const schema = require('../data/schema');
 const routes = require('./routes');
 const config = require('../config');
 const api = require('../api');
 
 // Initializing Express App
 const app = express();
+const isDebug = config.env === 'development';
 
 // Tell any CSS tooling (such as Material UI) to use all vendor prefixes if the
 // user agent is not known.
 global.navigator = global.navigator || {};
 global.navigator.userAgent = global.navigator.userAgent || 'all';
 
-if (config.env === 'development') {
+if (isDebug) {
   app.use(morgan('dev'));
   app.enable('trust proxy');
 }
@@ -48,6 +52,13 @@ app.use(
 
 // API MarketPlace
 app.use('/api', api);
+
+// GraphQL
+app.use('/graphql', bodyParser.json(), graphqlExpress({ schema }));
+
+if (isDebug) {
+  app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }));
+}
 
 // Fallback
 app.use(history());
