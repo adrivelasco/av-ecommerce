@@ -3,11 +3,14 @@
 const config = {
   env: process.env.NODE_ENV || 'production',
   port: process.env.PORT || 3002,
+
   apiMarketPlace: 'https://api.myjson.com/bins/wyjyh',
   apiBasePath: '/',
-  app: {
-    title: 'AV eCommerce',
-    description: 'Universal React App'
+
+  cache: {
+    host: process.env.REDIS_HOST || 'localhost',
+    port: process.env.REDIS_PORT || 6379,
+    defaultTimeSeconds: 1800
   }
 };
 
